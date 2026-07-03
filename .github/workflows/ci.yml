@@ -23,7 +23,7 @@ jobs:
           cache: maven
 
       - name: Run acceptance tests
-        run: mvn --batch-mode failsafe:integration-test failsafe:verify
+        run: mvn --batch-mode verify -Dsurefire.skip=true
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
