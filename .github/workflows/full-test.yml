@@ -1,0 +1,42 @@
+name: Full Test Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+  full-test:
+    name: Unit & Acceptance Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          cache: maven
+
+      - name: Run all tests
+        run: mvn --batch-mode verify
+
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: target/surefire-reports/**/*.xml
+          check_name: Unit Test Results
+          comment_mode: always
+
+      - name: Publish acceptance test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: target/failsafe-reports/**/TEST-*.xml
+          check_name: Acceptance Test Results
+          comment_mode: always

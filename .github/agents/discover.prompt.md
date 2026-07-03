@@ -1,6 +1,6 @@
 ---
 name: discover
-model: claude-sonnet-4.6
+model: claude-haiku-4.5
 allowed-tools: Write
 description: Discover feature rules from a user story using Example Mapping
 argument-hint: "<user story in quotes>"
@@ -55,4 +55,8 @@ After generating the rules, examples, and questions:
 
 
 
-Save the result to doc/specs/<feature>.md
+Save the result to doc/specs/<feature>.md.
+When the final spec review is approved and the spec is committed,
+the next workflow step is a single-rule cycle:
+`/accept "<rule name> @doc/specs/<feature>.md"` → `/tdd "<test class or method to drive>"` → `/review`
+Do not move to the next rule until the current one has completed that cycle.

@@ -53,16 +53,4 @@ Inbound port naming in format XxxUseCase.
 - Invoke the discovery agent with `/discovery "<user story>"` to produce an Example Mapping spec.
 - The agent saves output to `doc/specs/<feature>.md` and follows the conventions in `.github/instrutions/example-map-instructions.md`.
 - The intended flow is: run `/discovery` → refine the spec → derive acceptance tests → implement with TDD.
-
-### Development workflow
-Outer loop ATDD:
-1. Pick the next acceptance criterion from the example map.
-2. Write one acceptance test (@SpringBootTest) in `com.serenitydojo.cashback_rewards.acceptance_test`, named `<Feature>AcceptanceIT`
-3. Inner TDD loop until the acceptance test passes
-4. Move to next AC only when the previous one is fully implemented and all tests pass
-
-Inner loop TDD:
-1. Write one failing unit test (RED) in `com.serenitydojo.cashback_rewards.unit_test`, named `<Subject>Test`
-2. Minimum code to pass (GREEN)
-3. Refactor on green (REFACTOR)
-4. Run all tests, then next test
+- Once the final spec review is approved and the committed `doc/specs/<feature>.md` is in place, follow the repo-controlled rule cycle workflow in `.github/instrutions/rule-cycle-workflow.md`.
