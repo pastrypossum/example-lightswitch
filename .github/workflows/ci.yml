@@ -29,6 +29,6 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          files: target/failsafe-reports/**/*.xml
+          files: target/failsafe-reports/**/TEST-*.xml
           check_name: Acceptance Test Results
           comment_mode: always
