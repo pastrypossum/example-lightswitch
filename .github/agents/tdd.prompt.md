@@ -5,7 +5,7 @@ description: Run one TDD cycle (RED → GREEN → REFACTOR → CHALLENGE → STO
 argument-hint: "<test class or method to drive>"
 ---
 
-Run ONE TDD cycle for: $ARGUMENTS
+Run TDD cycles for: $ARGUMENTS — continue until all target acceptance tests pass.
 
 Architecture rules (do not read copilot-instructions.md — use these):
 - Domain: pure Java, no Spring/JPA. Ports in domain/port/in (XxxUseCase) and domain/port/out (LoadXxxPort/SaveXxxPort).
@@ -29,8 +29,8 @@ No extra methods, no anticipating the next test, no abstractions until refactori
 Run ALL tests after refactoring. Fix anything that breaks before moving on.
 
 ## CHALLENGE — drive out edge cases
-Propose at least one edge case. If approved, it becomes the next RED.
+Propose edge cases found during implementation. Add unit tests for any that are not yet covered. Run all tests to confirm they pass.
 
 ## STOP
-Report: which test passes, what production code was written/modified, what was refactored, what edge case is proposed.
-Do NOT write additional tests. Do NOT modify existing tests to make them pass. Wait for the user.
+Report: which tests pass, what production code was written/modified, what was refactored, what edge cases were found.
+Run `mvn clean test -q` and confirm all tests pass before reporting.

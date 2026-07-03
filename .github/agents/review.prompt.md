@@ -35,7 +35,7 @@ Use these as your reference standards — review against the project's own rules
 - No circular dependencies between packages.
 
 ### 2. Naming and Placement
-- Acceptance tests have the `*IT` suffix and live in `src/test/java/<package>/acceptance/`.
+- Acceptance tests have the `*IT` suffix and live in `src/test/java/<package>/acceptance_test/`.
 - Unit tests have the `*Test` suffix and live alongside the code they test.
 - `@DisplayName` text matches the spec's exact business language.
 - Class and method names follow project conventions from CLAUDE.md.

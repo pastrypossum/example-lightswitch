@@ -13,7 +13,7 @@ Use this workflow after discovery is complete and the final spec has been commit
 
 Upgrade a stage to `claude-sonnet-5` only if the output quality is not good enough in practice.
 
-For each remaining rule in the spec:
+For each remaining rule in the spec, drive the full cycle without pausing between stages:
 
 1. Run `/accept "<rule name> @doc/specs/<feature>.md"` for exactly one rule.
 2. Run `/tdd "<test class or method to drive>"` for that same rule.
@@ -21,6 +21,8 @@ For each remaining rule in the spec:
 4. Check the review results for `Feedback Needed`, `Rework Needed`, and `PR Ready`.
 5. If review raises feedback, update the spec and/or code, then rerun `/review` for the same rule.
 6. Keep rerunning `/review` until the feedback is cleared and the review is complete.
+
+Do not pause between steps 1–3 or ask for confirmation before starting the next stage. Only pause if the review raises a `Feedback Needed` question that requires a user decision.
 
 After all rules are complete:
 
