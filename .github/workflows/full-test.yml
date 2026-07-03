@@ -3,6 +3,10 @@ name: Full Test Run
 on:
   workflow_dispatch:
 
+permissions:
+  checks: write
+  pull-requests: write
+
 jobs:
   full-test:
     name: Unit & Acceptance Tests
