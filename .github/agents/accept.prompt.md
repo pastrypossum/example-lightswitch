@@ -1,54 +1,23 @@
 ---
 name: accept
-model: claude-sonnet-4.6
+model: claude-haiku-4.5
 description: Write a failing acceptance test for the next spec rule
 argument-hint: "<rule name> @doc/specs/<feature>.md"
 ---
 Write a failing acceptance test for: $ARGUMENTS
 
-Read copilot-instructions.md for project conventions before writing anything.
-Re-read the spec file to understand the full rule, its examples, and its counter-examples.
+Read these files before writing anything:
+1. The spec file for the rule, its examples, and counter-examples.
+2. The existing `*AcceptanceIT` class (if it exists) — match its exact pattern (@Nested, @Transactional, MockMvc setup, helper methods).
+3. All existing controllers in `adapter/in/web/` — only call endpoints that already exist or that this rule explicitly requires to be created. Do not call endpoints outside this rule's scope.
 
-## Structure
-
-One outer class per feature, in package `com.serenitydojo.cashback_rewards.acceptance_test`, named `<Feature>AcceptanceIT`.
-One @Nested inner class per rule — name it after the rule.
-One @Test per example from the spec.
-
-Use @DisplayName with the spec's exact business language:
-- Class: the rule name
-- Method: "The one where..." text from the spec
-
-## How to test
-
-Test through the REST API using @SpringBootTest + MockMvc.
-Send real HTTP requests. Assert real HTTP responses.
-NEVER call services or domain objects directly —
-this is an acceptance test, not a unit test.
-
-Assert exact values from the spec examples.
-For money: .andExpect(jsonPath("$.amount").value("1.60"))
-or use isEqualByComparingTo with BigDecimal.
-
-## What NOT to do
+Architecture rules:
+- Package: `com.serenitydojo.cashback_rewards.acceptance_test`, class `<Feature>AcceptanceIT`
+- One @Nested inner class per rule, one @Test per spec example
+- @DisplayName uses spec's exact business language
+- @SpringBootTest + MockMvc only — no mocks, no direct service/repo calls
+- @Transactional at class level for test isolation
+- Assert exact values from spec examples
 
 Do NOT write production code. The test MUST FAIL.
-A passing test means you tested nothing.
-Do NOT write tests for all rules at once.
-One rule only — the one specified in the arguments.
-Do NOT invent examples beyond what the spec provides.
-The spec is the contract.
-Do NOT use mocks in acceptance tests.
-Wire the full stack: controller → service → domain → persistence.
-
-## When you're done
-
-Run the test. Confirm it fails for the RIGHT reason:
-- Missing endpoint → 404 or compilation error (good)
-- Wrong value → not yet, the endpoint shouldn't exist
-- Test passes → something is wrong, investigate
-
-Report: which rule you tested, how many examples, and
-the failure reason.
-
-STOP. Do not proceed to implementation.
+Run the test. Report: rule tested, examples covered, failure reason. STOP.
