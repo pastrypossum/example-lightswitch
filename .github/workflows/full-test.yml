@@ -1,11 +1,11 @@
-name: CI
+name: Full Test Run
 
 on:
-  pull_request:
+  workflow_dispatch:
 
 jobs:
-  acceptance-tests:
-    name: Acceptance Tests
+  full-test:
+    name: Unit & Acceptance Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -18,10 +18,18 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Run acceptance tests
-        run: mvn --batch-mode failsafe:integration-test failsafe:verify
+      - name: Run all tests
+        run: mvn --batch-mode verify
 
-      - name: Publish test results
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: target/surefire-reports/**/*.xml
+          check_name: Unit Test Results
+          comment_mode: always
+
+      - name: Publish acceptance test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
