@@ -12,7 +12,7 @@ Read these files before writing anything:
 3. All existing controllers in `adapter/in/web/` — only call endpoints that already exist or that this rule explicitly requires to be created. Do not call endpoints outside this rule's scope.
 
 Architecture rules:
-- Package: `com.serenitydojo.cashback_rewards.acceptance_test`, class `<Feature>AcceptanceIT`
+- Package: `com.light_switch.acceptance_test`, class `<Feature>AcceptanceIT`
 - One @Nested inner class per rule, one @Test per spec example
 - @DisplayName uses spec's exact business language
 - @SpringBootTest + MockMvc only — no mocks, no direct service/repo calls

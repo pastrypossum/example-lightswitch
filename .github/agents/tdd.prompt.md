@@ -1,6 +1,6 @@
 ---
 name: tdd
-model: claude-sonnet-4.6
+model: claude-haiku-4.5
 description: Run one TDD cycle (RED → GREEN → REFACTOR → CHALLENGE → STOP)
 argument-hint: "<test class or method to drive>"
 ---
@@ -13,8 +13,8 @@ Architecture rules (do not read copilot-instructions.md — use these):
 - Adapter/in/web: controllers + DTOs only, no domain objects in HTTP responses.
 - Adapter/out/persistence: JPA entities + repos only.
 - Constructor injection everywhere. Domain exceptions mapped to HTTP in GlobalExceptionHandler only.
-- Unit tests: `com.serenitydojo.cashback_rewards.unit_test`, suffix `*Test`
-- Acceptance tests: `com.serenitydojo.cashback_rewards.acceptance_test`, suffix `*AcceptanceIT`
+- Unit tests: `com.light_switch.unit_test`, suffix `*Test`
+- Acceptance tests: `com.light_switch.acceptance_test`, suffix `*AcceptanceIT`
 
 ## RED — confirm the failure
 Run the failing test first. Read the failure message.
