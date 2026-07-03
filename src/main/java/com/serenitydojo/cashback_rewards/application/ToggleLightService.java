@@ -2,6 +2,7 @@ package com.serenitydojo.cashback_rewards.application;
 
 import com.serenitydojo.cashback_rewards.domain.model.Light;
 import com.serenitydojo.cashback_rewards.domain.model.LightState;
+import com.serenitydojo.cashback_rewards.domain.port.in.GetLightStateUseCase;
 import com.serenitydojo.cashback_rewards.domain.port.in.ToggleLightUseCase;
 import com.serenitydojo.cashback_rewards.domain.port.out.LoadLightPort;
 import com.serenitydojo.cashback_rewards.domain.port.out.SaveLightPort;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ToggleLightService implements ToggleLightUseCase {
+public class ToggleLightService implements ToggleLightUseCase, GetLightStateUseCase {
 
     private final LoadLightPort loadLightPort;
     private final SaveLightPort saveLightPort;
@@ -30,5 +31,12 @@ public class ToggleLightService implements ToggleLightUseCase {
         light.toggle();
         saveLightPort.saveLight(light);
         return light.getState();
+    }
+
+    @Override
+    public LightState getLightState(String id) {
+        return loadLightPort.loadLight(id)
+                .map(Light::getState)
+                .orElse(LightState.NOT_REGISTERED);
     }
 }

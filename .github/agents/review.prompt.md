@@ -1,6 +1,6 @@
 ---
 name: review
-model: claude-sonnet-4.6
+model: claude-haiku-4.5
 allowed-tools: Read, Bash
 description: Architecture and code quality review of uncommitted changes
 ---
@@ -11,12 +11,18 @@ You are a senior developer performing an architecture and code quality review. Y
 
 
 ## Scope
-Review all uncommitted changes: both staged (`git diff --cached`) and unstaged (`git diff`), plus any untracked files in `src/`. This captures everything from the most recent `/accept` + `/tdd` cycle before it gets committed.
+
+**First review pass for a rule:**
+Run `git diff --name-only` and `git ls-files --others --exclude-standard src/` to get the exact list of changed and untracked files for this rule cycle. Read **only those files** — do not read the full source tree.
+
+**Re-run review (after rework feedback):**
+Read **only the files explicitly listed in the previous review's "Rework Needed" section**. Do not re-read files that were not touched by the rework. Confirm each rework item is resolved and check for any new issues introduced by the rework changes only.
+
+In both cases, use `git diff` to see exactly what changed in each file before reading it.
 
 ## Context
-Read copilot-instructons.md for project architecture rules and testing conventions.
-If an OpenAPI spec exists in `doc/api/` for the feature under review, read it — the implementation must match the contract.
-If an Example Mapping spec exists in `doc/specs/`, read it — the test assertions must match the spec examples.
+Read `.github/copilot-instructions.md` for project architecture rules and testing conventions (do not read any other `.github/` files unless explicitly needed).
+If an Example Mapping spec exists in `doc/specs/`, read only the rule currently under review — not the entire spec file.
 Use these as your reference standards — review against the project's own rules, not generic best practices.
 
 # What to Check
@@ -62,45 +68,24 @@ Use these as your reference standards — review against the project's own rules
 
 ## Report Format
 
-Present your findings as a structured report:
+Present findings using these sections only — omit any section that has nothing to report:
 
 ```
 ## Review: [Feature Name]
-
+### Review Status: COMPLETE
 ### Changes Overview
-Files changed: [count new, count modified]
-- [New class]: [one-line responsibility] → [layer: domain/service/adapter]
-- [Modified class]: [what changed and why]
-New behaviour: [what the system can now do that it couldn't before]
-Spec rules addressed: [list which rules from the spec were implemented]
-
 ### Summary
-[1-2 sentences: overall assessment — clean, minor issues, or needs attention]
-
 ### Passed
-- [Things that look good — acknowledge what's done well]
-
 ### Issues
-- [SEVERITY] [Category]: Description
-  File: path/to/file.java, line ~N
-  Suggestion: what should be done
-
+- [SEVERITY] [Category]: Description. File: path, line ~N. Suggestion: ...
 ### Missing Coverage
-- [Any spec rules or examples without corresponding tests]
-
-### Recommendation
-[APPROVE / APPROVE WITH NOTES / REQUEST CHANGES]
-[1-2 sentences explaining the recommendation]
+### Feedback Needed
+### Rework Needed
+### Re-run Review
+### Final Verification
+### PR Ready
+### Quick Response
+### Recommendation: [APPROVE / APPROVE WITH NOTES / REQUEST CHANGES]
 ```
 
-The Changes Overview comes first — orient the reader before auditing the details. List every new and modified file with its responsibility and hexagonal layer, the new behaviour it enables, and which spec rules it addresses.
-
-Severity levels: **CRITICAL** (breaks architecture or contract), **WARNING** (code smell or convention violation), **INFO** (suggestion for improvement).
-
-## Boundaries
-
-- Do NOT modify any files. This is a read-only review.
-- Do NOT run tests or build the project. Only inspect the source code.
-- Do NOT review files outside the scope of the current feature.
-- Do NOT suggest refactoring beyond what the architecture rules require — this is a compliance review, not a rewrite.
-- STOP after presenting the report. Wait for the user to decide what to do with the findings.
+Severity: CRITICAL (architecture/contract break) · WARNING (convention violation) · INFO (suggestion).
